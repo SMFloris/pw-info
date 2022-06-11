@@ -1,4 +1,4 @@
-# Description
+# pw-info - Description
 Small utility written in Go that can find and filter pipewire objects based on their properties.  
 Uses `pw-cli dump` to get the data. 
 
