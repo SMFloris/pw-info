@@ -13,7 +13,7 @@ import (
 func main() {
 	app := cli.App("pw-info", "Filters pw-cli output in order to get objects based on properties")
 
-	pwCli := exec.Command("pw-cli", "dump", "all")
+	pwCli := exec.Command("pw-cli", "ls")
 	out, err := pwCli.CombinedOutput()
 	if err != nil {
 		log.Fatal(err)
@@ -66,8 +66,8 @@ func main() {
 }
 
 func PrintNode(node pipewire.PipewireNode, short bool) {
-	fmt.Printf("%s%d\n", getShortKey("id: ", short), node.Id)
-	fmt.Printf("%s%s\n", getShortKey("type: ", short), node.Type)
+	fmt.Printf("%s%d\n", getShortKey("id", short), node.Id)
+	fmt.Printf("%s%s\n", getShortKey("type", short), node.Type)
 }
 
 func PrintProperties(properties []pipewire.PipewireNodeProperty, short bool) {

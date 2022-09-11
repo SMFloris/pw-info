@@ -2,8 +2,7 @@ package pipewire
 
 import (
 	"errors"
-	"log"
-	"strconv"
+	"fmt"
 	"strings"
 )
 
@@ -34,28 +33,23 @@ func ParseOutput(output string) []PipewireNode {
 		}
 
 		// if id is encountered then it means we are starting a new property
-		if strings.Contains(trimmedLine, "\tid:") {
+		if strings.Contains(trimmedLine, "id") && strings.Contains(trimmedLine, "type") {
 			inProperties = false
-			intVar, err := strconv.Atoi(strings.TrimPrefix(trimmedLine, "\tid:"))
-			if err != nil {
-				log.Fatal(err)
+
+			var id int
+			var nodeType string
+			if _, err := fmt.Sscanf(trimmedLine, "\tid%d,type%s", &id, &nodeType); err != nil {
+				fmt.Println("error", err)
 			}
 			if currentNode.Id > 0 {
 				result = append(result, currentNode)
 			}
-			currentNode.Id = intVar
+			currentNode.Id = id
 			currentNode.Properties = []PipewireNodeProperty{}
+			currentNode.Type = nodeType
 			continue
-		}
-
-		if strings.Contains(trimmedLine, "\ttype:") {
-			value := strings.TrimPrefix(trimmedLine, "\ttype:")
-			currentNode.Type = value
-		}
-
-		if strings.Contains(trimmedLine, "\tproperties:") {
+		} else {
 			inProperties = true
-			continue
 		}
 
 		if !inProperties {
